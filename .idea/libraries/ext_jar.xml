@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="ext jar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/BMS-3.0-main/ext jar/AbsoluteLayout-RELEASE126.jar!/" />
+      <root url="jar://$PROJECT_DIR$/BMS-3.0-main/ext jar/mysql-connector-java-8.0.28.jar!/" />
+      <root url="jar://$PROJECT_DIR$/BMS-3.0-main/ext jar/rs2xml.jar!/" />
+      <root url="jar://$PROJECT_DIR$/BMS-3.0-main/ext jar/itextpdf-5.5.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
