@@ -1,3 +1,4 @@
+//import package
 import java.sql.*;
 import Project.ConnectionProvider;
 import java.text.SimpleDateFormat;
@@ -18,22 +19,22 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author LLJ LOO
+ * @author Loo Li Jin, Ooi Wei Sheng, Loke Kuan Ye, Yew Shan Hyee
  */
 public class Billing extends javax.swing.JFrame {
-public int finalTotal=0;
+public int finalTotal=0; // global accumulator
     /**
      * Creates new form design
      */
     public Billing() {
         initComponents();
-        SimpleDateFormat dFormat=new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dFormat=new SimpleDateFormat("dd-MM-yyyy"); //to display the current date
         Date date=new Date();
-        jLabel5.setText(dFormat.format(date));
+        jLabel5.setText(dFormat.format(date)); // display the current date in the text field
         
-        DateTimeFormatter dtf=DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter dtf=DateTimeFormatter.ofPattern("HH:mm:ss"); //to display the current time
         LocalDateTime now=LocalDateTime.now();
-        jLabel6.setText(dtf.format(now));
+        jLabel6.setText(dtf.format(now)); // display the current time in the text field
     }
 
     /**
@@ -321,14 +322,17 @@ public int finalTotal=0;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //The text field for the user name (user details)
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-        String name=jTextField1.getText();
+        String name=jTextField1.getText();// users can type the name in the text field
         try
         {
             Connection con=ConnectionProvider.getCon();
             Statement st=con.createStatement();
-            ResultSet rs=st.executeQuery("select * from customer where name like'"+name+"%'");
+            ResultSet rs=st.executeQuery("select * from customer where name like'"+name+"%'"); //excecute mySQL command
+            // display the following text field (condition)
+            // if user type the phone number, then press enter, the information of the user (name, contact number, email and address) will display
             if(rs.next())
             {
                 jTextField1.setText(rs.getString(1));
@@ -345,64 +349,77 @@ public int finalTotal=0;
         }
         catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null,e);
+            JOptionPane.showMessageDialog(null,e); //display the message
         }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
+    // text field for product name (to display the product name in text field)
     private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField6ActionPerformed
 
+    // text field for product price (to display the product price in text field)
     private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField7ActionPerformed
 
+    // text field for product quantity (to display the product quantity in text field)
     private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField8ActionPerformed
 
+    // text field for product description (to display the product description in text field)
     private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField9ActionPerformed
 
+    // Add button function to add the product details
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        int price=Integer.parseInt(jTextField7.getText());
-        int quantity=Integer.parseInt(jTextField8.getText());
-        int total=price*quantity;
-        DefaultTableModel model=(DefaultTableModel)jTable1.getModel();
-        model.addRow(new Object[]{jTextField6.getText(),jTextField9.getText(),price,quantity,total});
-        finalTotal=finalTotal+total;
-        String finalTotal1=String.valueOf(finalTotal);
-        jTextField10.setText(finalTotal1);
+        int price=Integer.parseInt(jTextField7.getText()); // to add the price by enter price in text field 7
+        int quantity=Integer.parseInt(jTextField8.getText()); // to add the quantity in text field 8
+        int total=price*quantity; // multiply price by quantity to get the total price of the product
+        DefaultTableModel model=(DefaultTableModel)jTable1.getModel(); // add all the fields into the table
+        model.addRow(new Object[]{jTextField6.getText(),jTextField9.getText(),price,quantity,total}); //display the product details (name, description, price, quantity and total)
+        finalTotal=finalTotal+total; //calculate the total price
+        String finalTotal1=String.valueOf(finalTotal); //convert to string type from int type
+        jTextField10.setText(finalTotal1); //place the string type of finalTotal1 into the jTextField10
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField10ActionPerformed
 
+    //save button to save the information
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        String name=jTextField1.getText();
-        String contactNo=jTextField2.getText();
-        String email=jTextField3.getText();
-        String address=jTextField4.getText();
-        String path="C:\\Users\\kuany\\Downloads\\";
-        com.itextpdf.text.Document doc=new com.itextpdf.text.Document();
+        String name=jTextField1.getText(); //taking the customer's name from jTextField1
+        String contactNo=jTextField2.getText(); //taking the customer's contact number from jTextField2
+        String email=jTextField3.getText(); //taking the customer's email address from jTextField3
+        String address=jTextField4.getText(); //taking the customer's address from jTextField4
+        String path="C:\\Users\\kuany\\Downloads\\"; // sat the path to store the pdf file (receipt)
+        com.itextpdf.text.Document doc=new com.itextpdf.text.Document(); //to save the pdf file into the path
+        // display the content of the pdf
         try
         {
             PdfWriter.getInstance(doc,new FileOutputStream(path+""+name+" "+jLabel5.getText()+".pdf"));
             doc.open();
+            // next line
             Paragraph paragraph1=new Paragraph("                                     Radiant Sdn Bhd (Billing Management System)\n                                          Contact Number:(+60)18-33888833\n\n");
-            doc.add(paragraph1);
+            doc.add(paragraph1); // add paragraph 1
+            // display the date, time, customer and details
             Paragraph paragraph2=new Paragraph("Date: "+jLabel5.getText()+"\nTime: "+jLabel6.getText()+"\nCustomer Details:\nName: "+name+"\nContact Number: "+contactNo+"\nEmail: "+email+"\nAddress: "+address+"\n\n");
-            doc.add(paragraph2);
+            doc.add(paragraph2); // add paragraph 2
+            // to have the table in the pdf file (5 columns)
             PdfPTable tbl=new PdfPTable(5);
-            tbl.addCell("Name");
-            tbl.addCell("Description");
-            tbl.addCell("Price(RM)");
-            tbl.addCell("Quantity");
-            tbl.addCell("Sub Total");
+            // the details of the table in pdf file
+            tbl.addCell("Name"); // name of the product
+            tbl.addCell("Description"); //description of the product
+            tbl.addCell("Price(RM)"); //price of the product
+            tbl.addCell("Quantity"); //quantity of the product
+            tbl.addCell("Sub Total"); //total price of the product
+
+            // show the table
             for(int i=0;i<jTable1.getRowCount();i++)
             {
                 String n=jTable1.getValueAt(i,0).toString();
@@ -416,26 +433,30 @@ public int finalTotal=0;
                 tbl.addCell(q);
                 tbl.addCell(s);
             }
-            doc.add(tbl);
+            doc.add(tbl); //add the table
+            // to show the product details (total, paid amount, return amount and welcome message)
             Paragraph paragraph3=new Paragraph("\nTotal: RM"+jTextField10.getText()+"\nPaid Amount: RM"+jTextField11.getText()+"\nReturn Amount: RM"+jTextField12.getText()+"\n\nThanks you for Visiting! Please Come Again.\nRadiant Sdn Bhd");
-            doc.add(paragraph3);
-            JOptionPane.showMessageDialog(null,"Bill Generated");
+            doc.add(paragraph3); //add paragraph
+            JOptionPane.showMessageDialog(null,"Bill Generated"); // prompt the user that the bill is generated successfully
             setVisible(true);
             new Billing().setVisible(true);
         }
         catch(Exception e)
-        {JOptionPane.showMessageDialog(null,e);}
+        {JOptionPane.showMessageDialog(null,e);} //to show the message
         doc.close();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    // customer details for contact number of customer
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
-        String contactNo=jTextField2.getText();
+        String contactNo=jTextField2.getText(); // contact number of the customer
         try
         {
             Connection con=ConnectionProvider.getCon();
             Statement st=con.createStatement();
-            ResultSet rs=st.executeQuery("select *from customer where contactNo like'"+contactNo+"%'");
+            ResultSet rs=st.executeQuery("select *from customer where contactNo like'"+contactNo+"%'");//execute mySQL command
+            // display the following text field (condition)
+            // if user type the phone number, then press enter, the information of the user (name, contact number, email and address) will display
             if(rs.next())
             {
                 jTextField1.setText(rs.getString(1));
@@ -456,9 +477,11 @@ public int finalTotal=0;
         }
     }//GEN-LAST:event_jTextField2ActionPerformed
 
+    // product details for product id
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
         // TODO add your handling code here:
         String pId=jTextField5.getText();
+        // if user type the phone number, then press enter, the information of the product (product id, product number, price, quantity and description) will display
          try
         {
             Connection con=ConnectionProvider.getCon();
@@ -485,21 +508,24 @@ public int finalTotal=0;
         }
     }//GEN-LAST:event_jTextField5ActionPerformed
 
+    // Paid Amount text field to display the price for paid amount
     private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
         // TODO add your handling code here:
         String paidAmount=jTextField11.getText();
         int z=Integer.parseInt(paidAmount);
-        finalTotal=z-finalTotal;
-        String finalTotal1=String.valueOf(finalTotal);
-        jTextField12.setText(finalTotal1);
+        finalTotal=z-finalTotal; // calculate the total price
+        String finalTotal1=String.valueOf(finalTotal); // to convert the int type into the string type
+        jTextField12.setText(finalTotal1); // to display finalTotal1 into the jTextField12
         jTextField12.setEditable(false);
     }//GEN-LAST:event_jTextField11ActionPerformed
 
+    //close button to close the billing program
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    //reset button to reset the information
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
